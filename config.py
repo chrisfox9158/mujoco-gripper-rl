@@ -4,5 +4,14 @@ RANDOMIZATION = {
 }
 
 TRACKING = {
-    "lifted_height": 0.1
+    "lifted_height": 0.1,
+    "success_height": 0.8,
+    "hold_steps_required": 50,
+    "crush_steps_required": 15,
+    "maximum_steps": 5000
+}
+
+REWARDS = {
+    "drop_penalty": -1.0,
+    "crush_penalty": -3.0
 }
