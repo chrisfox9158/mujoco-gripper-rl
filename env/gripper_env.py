@@ -6,6 +6,7 @@ import numpy as np
 from config import RANDOMIZATION
 from config import TRACKING
 from env import observations
+from env import rewards
 
 class GripperEnv:
     def __init__(self, xml_path, obs_extractors, reward_terms):
@@ -45,14 +46,20 @@ class GripperEnv:
             self.info["was_lifted"] = True
 
         obs = self._build_obs()
+        reward = self._compute_reward()
+
+        return obs, reward
     
+    def _compute_reward(self):
+        return sum(term(self.model, self.data, self.info) for term in self.reward_terms)
+
     def _build_obs(self):
         return np.concatenate([f(self.model, self.data) for f in self.obs_extractors])
     
 # Output testing
 if __name__ == "__main__":
-    env = GripperEnv(xml_path="three_finger_two_joint_gripper.xml", obs_extractors=[observations.obs_joint_angles], reward_terms=[])
+    env = GripperEnv(xml_path="three_finger_two_joint_gripper.xml", obs_extractors=[observations.obs_joint_angles], reward_terms=[rewards.reward_drop_penalty])
     obs = env.reset()
     action = np.zeros(env.action_dim)
-    env.step(action)
-    print(obs, obs.shape)
+    obs, reward = env.step(action)
+    print(obs, obs.shape, reward)
