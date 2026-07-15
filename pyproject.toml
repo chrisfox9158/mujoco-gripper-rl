@@ -1,0 +1,12 @@
+[project]
+name = "mujoco-gripper-rl"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "gymnasium>=1.3.0",
+    "mujoco>=3.10.0",
+    "numpy>=2.5.1",
+    "torch>=2.13.0",
+]
