@@ -21,3 +21,10 @@ def reward_crush_penalty(model, data, info):
     if info["object_crushed"]:
         return REWARDS["crush_penalty"]
     return 0.0
+
+def reward_success(model, data, info):
+    """Large reward for holding the object at target height long enough."""
+    
+    if info["success"]:
+        return REWARDS["success_reward"]
+    return 0.0

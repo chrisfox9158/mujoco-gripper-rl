@@ -112,7 +112,7 @@ class GripperEnv:
     
 # Output testing
 if __name__ == "__main__":
-    env = GripperEnv(xml_path="three_finger_two_joint_gripper.xml", obs_extractors=[observations.obs_joint_angles, observations.obs_touch_sensors], reward_terms=[rewards.reward_drop_penalty, rewards.reward_crush_penalty])
+    env = GripperEnv(xml_path="three_finger_two_joint_gripper.xml", obs_extractors=[observations.obs_joint_angles, observations.obs_touch_sensors], reward_terms=[rewards.reward_drop_penalty, rewards.reward_crush_penalty, rewards.reward_success])
     obs = env.reset()
     action = np.zeros(env.action_dim)
     obs, reward, done = env.step(action)

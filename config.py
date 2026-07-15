@@ -13,5 +13,6 @@ TRACKING = {
 
 REWARDS = {
     "drop_penalty": -1.0,
-    "crush_penalty": -3.0
+    "crush_penalty": -5.0,
+    "success_reward": 50.0
 }
