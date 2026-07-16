@@ -26,16 +26,17 @@ class GripperEnv:
         mujoco.mj_forward(self.model, self.data)
 
         mass_range = RANDOMIZATION["object_mass"]
-        threshold_range = RANDOMIZATION["crush_threshold"]
+        crush_threshold_range = RANDOMIZATION["crush_threshold"]
+        grasp_threshold = TRACKING["grasp_threshold"]
 
         random_mass_value = np.random.uniform(mass_range["min"], mass_range["max"])
-        random_threshold_value = np.random.uniform(threshold_range["min"], threshold_range["max"])
+        random_crush_threshold_value = np.random.uniform(crush_threshold_range["min"], crush_threshold_range["max"])
 
         self.object_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, "target_object")
         self.model.body_mass[self.object_id] = random_mass_value
 
         self.info = {
-            "crush_threshold": random_threshold_value,
+            "crush_threshold": random_crush_threshold_value,
             "object_body_id": self.object_id,
             "was_lifted": False,
             "hold_counter": 0,
@@ -44,7 +45,10 @@ class GripperEnv:
             "steps_complete": 0,
             "object_crushing": False,
             "object_crushed": False,
-            "object_crushing_counter": 0
+            "object_crushing_counter": 0,
+            "grasp_threshold": grasp_threshold,
+            "just_grasped": False,
+            "did_grasp": False
             }
 
         obs = self._build_obs()
@@ -72,7 +76,7 @@ class GripperEnv:
     
 # Output testing
 if __name__ == "__main__":
-    env = GripperEnv(xml_path="three_finger_two_joint_gripper.xml", obs_extractors=[observations.obs_joint_angles, observations.obs_touch_sensors], reward_terms=[rewards.reward_drop_penalty, rewards.reward_crush_penalty, rewards.reward_success])
+    env = GripperEnv(xml_path="three_finger_two_joint_gripper.xml", obs_extractors=[observations.obs_joint_angles, observations.obs_touch_sensors], reward_terms=[rewards.reward_drop_penalty, rewards.reward_crush_penalty, rewards.reward_grasp, rewards.reward_success])
     obs = env.reset()
     action = np.zeros(env.action_dim)
     obs, reward, done = env.step(action)

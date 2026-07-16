@@ -9,12 +9,14 @@ TRACKING = {
     "success_height": 0.8,
     "hold_steps_required": 50,
     "crush_steps_required": 15,
-    "maximum_steps": 5000
+    "maximum_steps": 5000,
+    "grasp_threshold": 0.3
 }
 
 REWARDS = {
     "drop_penalty": -1.0,
     "crush_penalty": -5.0,
+    "grasp_reward": 10.0,
     "success_reward": 50.0
 }
 

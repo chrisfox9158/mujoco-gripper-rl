@@ -22,9 +22,16 @@ def reward_crush_penalty(model, data, info):
         return REWARDS["crush_penalty"]
     return 0.0
 
+def reward_grasp(model, data, info):
+    """Medium reward, fires once, when grasp first occurs."""
+
+    if info["just_grasped"]:
+        return REWARDS["grasp_reward"]
+    return 0.0
+
 def reward_success(model, data, info):
     """Large reward for holding the object at target height long enough."""
-    
+
     if info["success"]:
         return REWARDS["success_reward"]
     return 0.0

@@ -15,6 +15,7 @@ class GripperTrackers:
 
         self._update_height_checks(data, info)
         self._update_crush_checks(model, data, info)
+        self._update_grasp_checks(model, data, info)
         self._update_steps(info)
     
     def _update_height_checks(self, data, info):
@@ -54,6 +55,15 @@ class GripperTrackers:
         # Fully-crushed check
         if info["object_crushing_counter"] >= TRACKING["crush_steps_required"]:
             info["object_crushed"] = True
+
+    def _update_grasp_checks(self, model, data, info):
+        """Sticky did_grasp gate, plus just_grasped — True only on the exact step of first grasp."""
+    
+        currently_grasping = observations.is_grasping(model, data, info)
+        info["just_grasped"] = currently_grasping and not info["did_grasp"]
+    
+        if currently_grasping:
+            info["did_grasp"] = True
 
     def _update_steps(self, info):
         """Increment total steps taken this episode."""

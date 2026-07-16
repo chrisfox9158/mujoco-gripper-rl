@@ -51,3 +51,9 @@ def is_crushing(model, data, info):
     
     touch_readings = obs_touch_sensors(model, data)
     return np.any(touch_readings > info["crush_threshold"])
+
+def is_grasping(model, data, info):
+    """Checks if the gripper is grasping the object."""
+
+    touch_readings = obs_touch_sensors(model, data)
+    return np.all(touch_readings >= info["grasp_threshold"])
