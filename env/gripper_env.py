@@ -81,15 +81,33 @@ class GripperEnv:
 # Output testing
 if __name__ == "__main__":
     env = GripperEnv(xml_path="three_finger_two_joint_gripper.xml",
-                      obs_extractors=[observations.obs_joint_angles, observations.obs_touch_sensors],
-                      reward_terms=[rewards.reward_drop_penalty, rewards.reward_crush_penalty,
-                                    rewards.reward_grasp, rewards.reward_distance,
-                                    rewards.reward_lift, rewards.reward_success])
-    obs = env.reset()
-    action = np.zeros(env.action_dim)
-    action[0] = 0.5  # try pushing the palm-lift motor, or a finger joint, to see something actually move
+                    obs_extractors=[observations.obs_joint_angles, observations.obs_touch_sensors, observations.obs_joint_velocities],
+                    reward_terms=[rewards.reward_drop_penalty, rewards.reward_crush_penalty,
+                                  rewards.reward_grasp, rewards.reward_distance,
+                                  rewards.reward_lift, rewards.reward_success])
 
-    for i in range(200):
+    term_names = ["drop", "crush", "grasp", "distance", "lift", "success"]
+    term_sums = {name: 0.0 for name in term_names}
+    episode_count = 0
+    total_steps = 5000
+
+    obs = env.reset()
+    action = np.random.uniform(-1, 1, size=env.action_dim)
+    hold_steps = 50
+
+    for i in range(total_steps):
+        if i % hold_steps == 0:
+            action = np.random.uniform(-1, 1, size=env.action_dim)  # pick a new direction only occasionally
         obs, reward, done = env.step(action)
-        if i % 20 == 0:
-            print(i, reward, done)
+
+        # tally each term using the now-current, post-step info
+        for name, term in zip(term_names, env.reward_terms):
+            term_sums[name] += term(env.model, env.data, env.info)
+
+        if done:
+            episode_count += 1
+            obs = env.reset()
+
+    print(f"\n{total_steps} steps across {episode_count} episodes\n")
+    for name in term_names:
+        print(f"{name:10s}: total={term_sums[name]:10.2f}   per_step={term_sums[name]/total_steps:8.4f}")

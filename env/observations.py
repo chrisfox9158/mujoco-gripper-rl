@@ -34,6 +34,19 @@ def obs_touch_sensors(model, data):
 
     return np.concatenate(readings)
 
+def obs_joint_velocities(model, data):
+    """Observes joint angular velocities and returns as a NumPy array."""
+
+    joint_names = HARDWARE["joint_names"]
+    velocities = []
+
+    for name in joint_names:
+        joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
+        qvel_adr = model.jnt_dofadr[joint_id]
+        velocities.append(data.qvel[qvel_adr])
+    
+    return np.array(velocities)
+
 def get_fingertip_positions(model, data):
     """Returns fingertip world positions as a (3, 3) array."""
 

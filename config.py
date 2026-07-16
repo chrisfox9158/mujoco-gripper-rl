@@ -1,7 +1,7 @@
 # Training hyperparameters
 RANDOMIZATION = {
     "object_mass": {"min": 0.1, "max": 0.4},
-    "crush_threshold": {"min": 5.0, "max": 20.0},
+    "crush_threshold": {"min": 10.0, "max": 20.0},
 }
 
 TRACKING = {
@@ -10,16 +10,16 @@ TRACKING = {
     "hold_steps_required": 50,
     "crush_steps_required": 15,
     "maximum_steps": 5000,
-    "grasp_threshold": 0.3
+    "grasp_threshold": 0.3,
 }
 
 REWARDS = {
-    "drop_penalty": -1.0,
-    "crush_penalty": -5.0,
-    "grasp_reward": 10.0,
-    "distance_scale": 0.05,
-    "lift_scale": 0.05,
-    "success_reward": 50.0
+    "drop_penalty": -10.0,
+    "crush_penalty": -20.0,
+    "grasp_reward": 5.0,
+    "distance_scale": 10.0, # dampens significantly as distance delta is very small step-to-step
+    "lift_scale": 25.0, # dampens significantly as height delta is very small step-to-step
+    "success_reward": 100.0,
 }
 
 # XML model-specific parameters

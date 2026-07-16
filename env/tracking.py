@@ -28,7 +28,6 @@ class GripperTrackers:
             info["was_lifted"] = True
 
         # Success height step-counter
-        object_z = data.xpos[info["object_body_id"]][2]
         if object_z >= TRACKING["success_height"]:
             info["hold_counter"] += 1
         else:
