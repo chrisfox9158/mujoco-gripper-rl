@@ -3,13 +3,13 @@ import mujoco
 import numpy as np
 
 # Local imports
-
+from config import HARDWARE
 
 # Observation handlers
 def obs_joint_angles(model, data):
     """Observes joint angles and returns as a NumPy array."""
 
-    joint_names = ["palm_lift", "finger1_joint1", "finger1_joint2", "finger2_joint1", "finger2_joint2", "finger3_joint1", "finger3_joint2"]
+    joint_names = HARDWARE["joint_names"]
     angles = []
     
     for name in joint_names:
@@ -22,7 +22,7 @@ def obs_joint_angles(model, data):
 def obs_touch_sensors(model, data):
     """Observes touch sensor data and returns as a NumPy array."""
 
-    sensor_names = ["finger1_touch", "finger2_touch", "finger3_touch"]
+    sensor_names = HARDWARE["sensor_names"]
     readings = []
     
     for name in sensor_names:
@@ -33,6 +33,18 @@ def obs_touch_sensors(model, data):
         readings.append(value)
 
     return np.concatenate(readings)
+
+def get_fingertip_positions(model, data):
+    """Returns fingertip world positions as a (3, 3) array."""
+
+    site_names = HARDWARE["site_names"]
+    positions = []
+
+    for name in site_names:
+        site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, name)
+        positions.append(data.site_xpos[site_id])
+
+    return np.array(positions)
 
 def is_crushing(model, data, info):
     """Checks if the gripper is crushing the object."""

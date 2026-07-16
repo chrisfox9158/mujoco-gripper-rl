@@ -7,6 +7,7 @@ from config import RANDOMIZATION
 from config import TRACKING
 from env import observations
 from env import rewards
+from env import tracking
 
 class GripperEnv:
     def __init__(self, xml_path, obs_extractors, reward_terms):
@@ -15,6 +16,8 @@ class GripperEnv:
         self.obs_extractors = obs_extractors
         self.reward_terms = reward_terms
         self.action_dim = self.model.nu
+        self.trackers = tracking.GripperTrackers()
+        self.done_conditions = tracking.GripperDoneConditions()
 
     def reset(self):
         """Reset the simulation back to default, with randomized object values."""
@@ -52,51 +55,8 @@ class GripperEnv:
         self.data.ctrl[:] = action
         mujoco.mj_step(self.model, self.data)
 
-        # Initial lift tracking (sticky)
-        object_z = self.data.xpos[self.info["object_body_id"]][2]
-        if object_z >= TRACKING["lifted_height"] or self.info["was_lifted"]:
-            self.info["was_lifted"] = True
-
-        # Crush tracker
-        if observations.is_crushing(self.model, self.data, self.info):
-            self.info["object_crushing"] = True
-        else:
-            self.info["object_crushing"] = False
-        
-        # Crush step-counter
-        if self.info["object_crushing"]:
-            self.info["object_crushing_counter"] += 1
-        else:
-            self.info["object_crushing_counter"] = 0
-
-        # Fully-crushed check
-        if self.info["object_crushing_counter"] >= TRACKING["crush_steps_required"]:
-            self.info["object_crushed"] = True
-        
-        # Success height step-counter
-        if object_z >= TRACKING["success_height"]:
-            self.info["hold_counter"] += 1
-        else:
-            self.info["hold_counter"] = 0
-        
-        # Steps-complete counter
-        self.info["steps_complete"] += 1
-        
-        # Success update via hold_counter check
-        if self.info["hold_counter"] >= TRACKING["hold_steps_required"]:
-            self.info["success"] = True
-
-        # Done update via success check
-        if self.info["success"]:
-            self.info["done"] = True
-
-        # Done update via steps_complete check
-        if self.info["steps_complete"] >= TRACKING["maximum_steps"]:
-            self.info["done"] = True
-
-        # Done update via object_crushed check
-        if self.info["object_crushed"]:
-            self.info["done"] = True
+        self.trackers.update(self.model, self.data, self.info)
+        self.info["done"] = self.done_conditions.done_conditions(self.info)
 
         obs = self._build_obs()
         reward = self._compute_reward()

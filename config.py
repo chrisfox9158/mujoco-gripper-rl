@@ -1,3 +1,4 @@
+# Training hyperparameters
 RANDOMIZATION = {
     "object_mass": {"min": 0.1, "max": 0.4},
     "crush_threshold": {"min": 5.0, "max": 20.0},
@@ -15,4 +16,13 @@ REWARDS = {
     "drop_penalty": -1.0,
     "crush_penalty": -5.0,
     "success_reward": 50.0
+}
+
+# XML model-specific parameters
+HARDWARE = {
+    "joint_names": ["palm_lift", "finger1_joint1", "finger1_joint2",
+                     "finger2_joint1", "finger2_joint2",
+                     "finger3_joint1", "finger3_joint2"],
+    "sensor_names": ["finger1_touch", "finger2_touch", "finger3_touch"],
+    "site_names": ["finger1_tip", "finger2_tip", "finger3_tip"],
 }
