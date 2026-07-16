@@ -46,6 +46,15 @@ def get_fingertip_positions(model, data):
 
     return np.array(positions)
 
+def get_average_distance(model, data, info):
+    """Returns average straight-line distance to object across all fingertips."""
+
+    fingertip_positions = get_fingertip_positions(model, data)
+    object_position = data.xpos[info["object_body_id"]]
+
+    distances = np.linalg.norm(fingertip_positions - object_position, axis=1)
+    return np.mean(distances)
+
 def is_crushing(model, data, info):
     """Checks if the gripper is crushing the object."""
     

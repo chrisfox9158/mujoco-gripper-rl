@@ -16,8 +16,9 @@ class GripperTrackers:
         self._update_height_checks(data, info)
         self._update_crush_checks(model, data, info)
         self._update_grasp_checks(model, data, info)
+        self._update_distance_checks(model, data, info)
         self._update_steps(info)
-    
+
     def _update_height_checks(self, data, info):
         """Check object-lifted status after initial rendering, allowing drop checks."""
 
@@ -36,6 +37,10 @@ class GripperTrackers:
         # Success update via hold_counter check
         if info["hold_counter"] >= TRACKING["hold_steps_required"]:
             info["success"] = True
+        
+        # Step-to-step height change tracker
+        info["height_delta"] = (object_z - info["previous_height"])
+        info["previous_height"] = object_z
     
     def _update_crush_checks(self, model, data, info):
         """Track crushing and crushed states, including increment step counter."""
@@ -57,13 +62,20 @@ class GripperTrackers:
             info["object_crushed"] = True
 
     def _update_grasp_checks(self, model, data, info):
-        """Sticky did_grasp gate, plus just_grasped — True only on the exact step of first grasp."""
+        """Sticky one-time tracker for grasp occurence."""
     
         currently_grasping = observations.is_grasping(model, data, info)
         info["just_grasped"] = currently_grasping and not info["did_grasp"]
     
         if currently_grasping:
             info["did_grasp"] = True
+
+    def _update_distance_checks(self, model, data, info):
+        """Track fingertip-to-object distance change."""
+
+        current_distance = observations.get_average_distance(model, data, info)
+        info["distance_delta"] = info["previous_distance"] - current_distance
+        info["previous_distance"] = current_distance
 
     def _update_steps(self, info):
         """Increment total steps taken this episode."""

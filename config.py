@@ -17,6 +17,8 @@ REWARDS = {
     "drop_penalty": -1.0,
     "crush_penalty": -5.0,
     "grasp_reward": 10.0,
+    "distance_scale": 0.05,
+    "lift_scale": 0.05,
     "success_reward": 50.0
 }
 

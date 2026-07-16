@@ -29,6 +29,14 @@ def reward_grasp(model, data, info):
         return REWARDS["grasp_reward"]
     return 0.0
 
+def reward_distance(model, data, info):
+    """Small reward for positive fingertip-to-object delta."""
+    return info["distance_delta"] * REWARDS["distance_scale"]
+
+def reward_lift(model, data, info):
+    """Small reward proportional to height gain delta."""
+    return info["height_delta"] * REWARDS["lift_scale"]
+
 def reward_success(model, data, info):
     """Large reward for holding the object at target height long enough."""
 

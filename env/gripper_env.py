@@ -48,8 +48,12 @@ class GripperEnv:
             "object_crushing_counter": 0,
             "grasp_threshold": grasp_threshold,
             "just_grasped": False,
-            "did_grasp": False
+            "did_grasp": False,
+            "distance_delta": 0,
+            "height_delta": 0
             }
+        self.info["previous_distance"] = observations.get_average_distance(self.model, self.data, self.info)
+        self.info["previous_height"] = self.data.xpos[self.info["object_body_id"]][2]
 
         obs = self._build_obs()
         self.obs_dim = len(obs)
@@ -76,8 +80,16 @@ class GripperEnv:
     
 # Output testing
 if __name__ == "__main__":
-    env = GripperEnv(xml_path="three_finger_two_joint_gripper.xml", obs_extractors=[observations.obs_joint_angles, observations.obs_touch_sensors], reward_terms=[rewards.reward_drop_penalty, rewards.reward_crush_penalty, rewards.reward_grasp, rewards.reward_success])
+    env = GripperEnv(xml_path="three_finger_two_joint_gripper.xml",
+                      obs_extractors=[observations.obs_joint_angles, observations.obs_touch_sensors],
+                      reward_terms=[rewards.reward_drop_penalty, rewards.reward_crush_penalty,
+                                    rewards.reward_grasp, rewards.reward_distance,
+                                    rewards.reward_lift, rewards.reward_success])
     obs = env.reset()
     action = np.zeros(env.action_dim)
-    obs, reward, done = env.step(action)
-    print(obs, obs.shape, reward, done)
+    action[0] = 0.5  # try pushing the palm-lift motor, or a finger joint, to see something actually move
+
+    for i in range(200):
+        obs, reward, done = env.step(action)
+        if i % 20 == 0:
+            print(i, reward, done)
