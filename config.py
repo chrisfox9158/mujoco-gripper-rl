@@ -24,6 +24,7 @@ REWARDS = {
 
 # XML model-specific parameters
 HARDWARE = {
+    "hardware_name": "three_finger_two_joint_gripper.xml",
     "joint_names": ["palm_lift", "finger1_joint1", "finger1_joint2",
                      "finger2_joint1", "finger2_joint2",
                      "finger3_joint1", "finger3_joint2"],
@@ -33,7 +34,7 @@ HARDWARE = {
 
 AGENT_SPECS = {
     "replay_buffer_capacity": int(1e6), # requires integer
-    "replay_buffer_batch_size": int(1e3), # requires integer
+    "replay_buffer_batch_size": int(10), # requires integer
     "actor_learning_rate": 3e-4, # known default: 3e-4
     "critic_learning_rate": 3e-4, # known default: 3e-4
     "default_noise_scale": 0.125,
@@ -42,4 +43,12 @@ AGENT_SPECS = {
     "noise_clip": 0.5, # known default: 0.5
     "policy_delay": 2, # known default: 2
     "tau": 0.005 # known default: 0.005
+}
+
+TRAINING_SPECS = {
+    "num_episodes": 10,
+    "warmup_steps": 5,
+    "noise_start": 0.3,
+    "noise_end": 0.05,
+    "noise_decay_rate": 0.005
 }

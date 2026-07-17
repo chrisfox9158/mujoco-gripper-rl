@@ -6,9 +6,9 @@ import os
 import sys
 
 # Local imports
-from networks import Actor
-from networks import Critic
-from replay_buffer import ReplayBuffer
+from agent.networks import Actor
+from agent.networks import Critic
+from agent.replay_buffer import ReplayBuffer
 from config import AGENT_SPECS
 
 class TD3():
