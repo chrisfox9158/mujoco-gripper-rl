@@ -5,7 +5,6 @@ import torch.nn as nn
 # Class definition for Actor agents
 class Actor(nn.Module):
     """Definition for the Actor agent type."""
-
     def __init__(self, obs_dim, action_dim):
         super().__init__()
         self.layer1 = nn.Linear(obs_dim, 256) # Begins series of layer-to-layer nn "transformations" of data (from # observer inputs to # available actions)
@@ -20,7 +19,6 @@ class Actor(nn.Module):
     
 class Critic(nn.Module):
     """Definition for the Critic agent type."""
-
     def __init__(self, obs_dim, action_dim):
         super().__init__()
         self.layer1 = nn.Linear(obs_dim + action_dim, 256)
