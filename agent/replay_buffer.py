@@ -1,5 +1,6 @@
 # Library imports
 import numpy as np
+import torch
 
 # Local imports
 from config import AGENT_SPECS
@@ -8,8 +9,9 @@ class ReplayBuffer():
     """Replay buffer system allowing random sampling of a large training-data pool."""
     def __init__(self, obs_dim, action_dim):
         self.capacity = AGENT_SPECS["replay_buffer_capacity"]
-        self.ptr = 0
+        self.batch_size = AGENT_SPECS["replay_buffer_batch_size"]
         self.size = 0
+        self.ptr = 0
         
         self.states = np.zeros((self.capacity, obs_dim), dtype=np.float32)
         self.actions = np.zeros((self.capacity, action_dim), dtype=np.float32)
@@ -26,3 +28,14 @@ class ReplayBuffer():
 
         self.ptr = (self.ptr + 1) % self.capacity
         self.size = min(self.size + 1, self.capacity)
+
+    def sample(self):
+        i = np.random.choice(self.size, self.batch_size, replace=False)
+
+        tensor_states = torch.from_numpy(self.states[i])
+        tensor_actions = torch.from_numpy(self.actions[i])
+        tensor_rewards = torch.from_numpy(self.rewards[i])
+        tensor_next_states = torch.from_numpy(self.next_states[i])
+        tensor_dones = torch.from_numpy(self.dones[i])
+
+        return tensor_states, tensor_actions, tensor_rewards, tensor_next_states, tensor_dones
