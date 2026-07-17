@@ -21,3 +21,7 @@ runs/
         ├── reward_curve.png
         ├── success_rate.png
         └── term_breakdown.png
+
+
+### References ###
+Agentic structure implements TD3 strategy, matching the twin-critic and delayed-update structure from Fujimoto et al. [https://arxiv.org/abs/1802.09477]
