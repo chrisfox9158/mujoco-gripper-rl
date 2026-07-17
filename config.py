@@ -32,5 +32,6 @@ HARDWARE = {
 }
 
 AGENT_SPECS = {
-    "replay_buffer_capacity": 10 ** 5
+    "replay_buffer_capacity": 10 ** 5,
+    "replay_buffer_batch_size": 10 ** 2
 }
