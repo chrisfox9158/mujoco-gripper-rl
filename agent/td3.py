@@ -1,6 +1,9 @@
 # Library imports
 import torch
 import numpy as np
+import json
+import os
+import sys
 
 # Local imports
 from networks import Actor
@@ -10,7 +13,7 @@ from config import AGENT_SPECS
 
 class TD3():
     """The primary agent system: active agent instances, random noise injection, TD3-specific architecture."""
-    def __init__(self, obs_dim, action_dim):
+    def __init__(self, obs_dim, action_dim, hardware_name):
         """Set up TD3's six agents, two optimizers, and sync systems."""
         self.actor = Actor(obs_dim, action_dim)
         self.actor_target = Actor(obs_dim, action_dim)
@@ -28,8 +31,9 @@ class TD3():
         self.critic2_target.load_state_dict(self.critic2.state_dict())
 
         self.replay_buffer = ReplayBuffer(obs_dim, action_dim)
-
         self.step_counter = 0
+
+        self.load(obs_dim, action_dim, hardware_name)
 
     def select_action(self, state, noise_scale=AGENT_SPECS["default_noise_scale"]):
         """Select action and add random noise."""
@@ -83,3 +87,43 @@ class TD3():
             
             for target_param, live_param in zip(self.critic2_target.parameters(), self.critic2.parameters()):
                 target_param.data.copy_(AGENT_SPECS["tau"] * live_param.data + (1 - AGENT_SPECS["tau"]) * target_param.data)
+
+    def save(self, checkpoint_path, metadata_path, obs_dim, action_dim, hardware_name):
+        """Save the state of the current run to given paths."""
+        weights = {
+            "actor": self.actor.state_dict(),
+            "actor_target": self.actor_target.state_dict(),
+            "critic1": self.critic1.state_dict(),
+            "critic1_target": self.critic1_target.state_dict(),
+            "critic2": self.critic2.state_dict(),
+            "critic2_target": self.critic2_target.state_dict(),
+        }
+        torch.save(weights, checkpoint_path)
+
+        metadata = {
+            "obs_dim": obs_dim,
+            "action_dim": action_dim,
+            "hardware_name": hardware_name,
+        }
+
+        with open(metadata_path, "w") as f:
+            json.dump(metadata, f, indent=2)
+
+    def load(self, obs_dim, action_dim, hardware_name):
+        """Load a partially-trained snapshot from the loader folder."""
+        metadata_path = "loader/metadata.json"
+        checkpoint_path = "loader/checkpoint.pt"
+        
+        if os.path.isfile(metadata_path):
+            with open(metadata_path, "r") as f:
+                metadata = json.load(f)
+                if metadata["obs_dim"] == obs_dim and metadata["action_dim"] == action_dim and metadata["hardware_name"] == hardware_name:
+                    checkpoint = torch.load(checkpoint_path)
+                    self.actor.load_state_dict(checkpoint["actor"])
+                    self.actor_target.load_state_dict(checkpoint["actor_target"])
+                    self.critic1.load_state_dict(checkpoint["critic1"])
+                    self.critic1_target.load_state_dict(checkpoint["critic1_target"])
+                    self.critic2.load_state_dict(checkpoint["critic2"])
+                    self.critic2_target.load_state_dict(checkpoint["critic2_target"])
+                else:
+                    sys.exit("Loader checkpoint incompatible with current setup. Replace the loader/ files with compatible files, or clear the folder to train fresh.")
