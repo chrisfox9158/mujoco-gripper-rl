@@ -30,3 +30,7 @@ HARDWARE = {
     "sensor_names": ["finger1_touch", "finger2_touch", "finger3_touch"],
     "site_names": ["finger1_tip", "finger2_tip", "finger3_tip"],
 }
+
+AGENT_SPECS = {
+    "replay_buffer_capacity": 10 ** 5
+}
