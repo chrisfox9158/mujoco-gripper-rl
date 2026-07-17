@@ -1,7 +1,7 @@
 # Training hyperparameters
 RANDOMIZATION = {
-    "object_mass": {"min": 0.1, "max": 0.4},
-    "crush_threshold": {"min": 10.0, "max": 20.0},
+    "object_mass": {"min": 0.1, "max": 0.4}, # Default: 0.1, 0.4 
+    "crush_threshold": {"min": 10.0, "max": 20.0}, # Default: 10.0, 20.0
 }
 
 TRACKING = {
@@ -9,8 +9,9 @@ TRACKING = {
     "success_height": 0.8,
     "hold_steps_required": 50,
     "crush_steps_required": 15,
-    "maximum_steps": 5e3,
+    "maximum_steps": int(5e3),
     "grasp_threshold": 0.3,
+    "control_repeat": 5
 }
 
 REWARDS = {
@@ -34,7 +35,7 @@ HARDWARE = {
 
 AGENT_SPECS = {
     "replay_buffer_capacity": int(1e6), # requires integer
-    "replay_buffer_batch_size": int(10), # requires integer
+    "replay_buffer_batch_size": int(256), # requires integer
     "actor_learning_rate": 3e-4, # known default: 3e-4
     "critic_learning_rate": 3e-4, # known default: 3e-4
     "default_noise_scale": 0.125,
@@ -46,9 +47,10 @@ AGENT_SPECS = {
 }
 
 TRAINING_SPECS = {
-    "num_episodes": 10,
-    "warmup_steps": 5,
+    "num_episodes": 2000,
+    "warmup_steps": 5000,
     "noise_start": 0.3,
     "noise_end": 0.05,
-    "noise_decay_rate": 0.005
+    "noise_decay_rate": 0.002,
+    "train_freq": 4
 }

@@ -26,6 +26,17 @@ class GripperTrackers:
         object_z = data.xpos[info["object_body_id"]][2]
         if object_z >= TRACKING["lifted_height"] or info["was_lifted"]:
             info["was_lifted"] = True
+        
+        # Previous hold check
+        info["was_held_before"] = info["was_lifted"] and not info.get("has_dropped_since_lift", False)
+
+        if object_z >= TRACKING["lifted_height"]:
+            info["was_lifted"] = True
+            info["has_dropped_since_lift"] = False   # re-armed
+
+        info["just_dropped"] = info["was_held_before"] and object_z <= 0.05 # 0.05 = floor threshold
+        if info["just_dropped"]:
+            info["has_dropped_since_lift"] = True
 
         # Success height step-counter
         if object_z >= TRACKING["success_height"]:

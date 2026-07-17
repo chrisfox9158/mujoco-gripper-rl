@@ -39,6 +39,9 @@ class GripperEnv:
             "crush_threshold": random_crush_threshold_value,
             "object_body_id": self.object_id,
             "was_lifted": False,
+            "was_held_before": False,
+            "has_dropped_since_lift": False,
+            "just_dropped": False,
             "hold_counter": 0,
             "success": False,
             "done": False,
@@ -61,7 +64,8 @@ class GripperEnv:
     
     def step(self, action):
         self.data.ctrl[:] = action
-        mujoco.mj_step(self.model, self.data)
+        for _ in range(TRACKING["control_repeat"]):
+            mujoco.mj_step(self.model, self.data)
 
         self.trackers.update(self.model, self.data, self.info)
         self.info["done"] = self.done_conditions.done_conditions(self.info)
@@ -73,6 +77,10 @@ class GripperEnv:
         return obs, reward, done
     
     def _compute_reward(self):
+        self.last_reward_breakdown = {
+            term.__name__: term(self.model, self.data, self.info)
+            for term in self.reward_terms
+        }
         return sum(term(self.model, self.data, self.info) for term in self.reward_terms)
 
     def _build_obs(self):

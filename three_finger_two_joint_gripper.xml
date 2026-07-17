@@ -11,11 +11,11 @@
             <geom name="palm_geom" type="cylinder" size="0.08 0.02" rgba="0.5 0.5 0.5 1"/>
         
             <body name="finger1_prox" pos="0.09 0 0" euler="0 0 0">
-                <joint name="finger1_joint1" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.2"/>
+                <joint name="finger1_joint1" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.8"/>
                 <geom name="finger1_geom1" type="capsule" fromto="0 0 0 0.04 0 -0.05" size="0.015" rgba="0.05 0.05 0.05 1"/>
 
                 <body name="finger1_mid" pos="0.04 0 -0.05">
-                    <joint name="finger1_joint2" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.2"/>
+                    <joint name="finger1_joint2" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.8"/>
                     <geom name="finger1_geom2" type="capsule" fromto="0 0 0 0.04 0 -0.05" size="0.015" rgba="0.05 0.05 0.05 1"/>
 
                     <body name="finger1_tip_seg" pos="0.04 0 -0.05">
@@ -26,11 +26,11 @@
             </body>
 
             <body name="finger2_prox" pos="-0.045 0.078 0" euler="0 0 2.094">
-                <joint name="finger2_joint1" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.2"/>
+                <joint name="finger2_joint1" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.8"/>
                 <geom name="finger2_geom1" type="capsule" fromto="0 0 0 0.04 0 -0.05" size="0.015" rgba="0.05 0.05 0.05 1"/>
 
                 <body name="finger2_mid" pos="0.04 0 -0.05">
-                    <joint name="finger2_joint2" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.2"/>
+                    <joint name="finger2_joint2" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.8"/>
                     <geom name="finger2_geom2" type="capsule" fromto="0 0 0 0.04 0 -0.05" size="0.015" rgba="0.05 0.05 0.05 1"/>
 
                     <body name="finger2_tip_seg" pos="0.04 0 -0.05">
@@ -41,11 +41,11 @@
             </body>
 
             <body name="finger3_prox" pos="-0.045 -0.078 0" euler="0 0 4.189">
-                <joint name="finger3_joint1" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.2"/>
+                <joint name="finger3_joint1" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.8"/>
                 <geom name="finger3_geom1" type="capsule" fromto="0 0 0 0.04 0 -0.05" size="0.015" rgba="0.05 0.05 0.05 1"/>
 
                 <body name="finger3_mid" pos="0.04 0 -0.05">
-                    <joint name="finger3_joint2" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.2"/>
+                    <joint name="finger3_joint2" type="hinge" axis="0 1 0" range="-0.2 1.3" damping="0.8"/>
                     <geom name="finger3_geom2" type="capsule" fromto="0 0 0 0.04 0 -0.05" size="0.015" rgba="0.05 0.05 0.05 1"/>
 
                     <body name="finger3_tip_seg" pos="0.04 0 -0.05">
@@ -63,16 +63,16 @@
     </worldbody>
 
     <actuator>
-        <motor joint="palm_lift" name="palm_motor" gear="30" ctrllimited="true" ctrlrange="-1 1"/>
+        <motor joint="palm_lift" name="palm_motor" gear="20" ctrllimited="true" ctrlrange="-1 1"/>
 
-        <motor joint="finger1_joint1" name="finger1_motor1" gear="5" ctrllimited="true" ctrlrange="-1 1"/>
-        <motor joint="finger1_joint2" name="finger1_motor2" gear="5" ctrllimited="true" ctrlrange="-1 1"/>
+        <motor joint="finger1_joint1" name="finger1_motor1" gear="3.5" ctrllimited="true" ctrlrange="-1 1"/>
+        <motor joint="finger1_joint2" name="finger1_motor2" gear="3.5" ctrllimited="true" ctrlrange="-1 1"/>
 
-        <motor joint="finger2_joint1" name="finger2_motor1" gear="5" ctrllimited="true" ctrlrange="-1 1"/>
-        <motor joint="finger2_joint2" name="finger2_motor2" gear="5" ctrllimited="true" ctrlrange="-1 1"/>
+        <motor joint="finger2_joint1" name="finger2_motor1" gear="3.5" ctrllimited="true" ctrlrange="-1 1"/>
+        <motor joint="finger2_joint2" name="finger2_motor2" gear="3.5" ctrllimited="true" ctrlrange="-1 1"/>
 
-        <motor joint="finger3_joint1" name="finger3_motor1" gear="5" ctrllimited="true" ctrlrange="-1 1"/>
-        <motor joint="finger3_joint2" name="finger3_motor2" gear="5" ctrllimited="true" ctrlrange="-1 1"/>
+        <motor joint="finger3_joint1" name="finger3_motor1" gear="3.5" ctrllimited="true" ctrlrange="-1 1"/>
+        <motor joint="finger3_joint2" name="finger3_motor2" gear="3.5" ctrllimited="true" ctrlrange="-1 1"/>
     </actuator>
 
     <sensor>

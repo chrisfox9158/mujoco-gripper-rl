@@ -1,0 +1,5 @@
+{
+  "obs_dim": 17,
+  "action_dim": 7,
+  "hardware_name": "three_finger_two_joint_gripper.xml"
+}
