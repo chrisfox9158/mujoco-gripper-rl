@@ -9,7 +9,7 @@ TRACKING = {
     "success_height": 0.8,
     "hold_steps_required": 50,
     "crush_steps_required": 15,
-    "maximum_steps": 5000,
+    "maximum_steps": 5e3,
     "grasp_threshold": 0.3,
 }
 
@@ -32,6 +32,9 @@ HARDWARE = {
 }
 
 AGENT_SPECS = {
-    "replay_buffer_capacity": 10 ** 5,
-    "replay_buffer_batch_size": 10 ** 2
+    "replay_buffer_capacity": int(1e6), # requires integer
+    "replay_buffer_batch_size": int(1e3), # requires integer
+    "actor_learning_rate": 3e-4,
+    "critic_learning_rate": 3e-4,
+    "default_noise_scale": 0.125
 }
