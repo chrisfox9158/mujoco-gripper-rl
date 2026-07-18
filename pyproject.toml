@@ -1,7 +1,7 @@
-[project]
+[Mujoco Gripper RL]
 name = "mujoco-gripper-rl"
 version = "0.1.0"
-description = "Add your description here"
+description = "PyTorch-based TD3 RL agent for MuJoCo-based pressure-sensitive robotic gripper environment."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
