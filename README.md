@@ -1,4 +1,4 @@
-# MuJoCo Three-Finger Gripper — TD3 (From Scratch)
+# MuJoCo Three-Finger Gripper — TD3 RL Implementation
 
 ## Purpose
 A TD3-based reinforcement learning project involving a 3D-simulated, pressure-sensitive three-finger robotic gripper. The model is designed to learn to grasp and lift an object whose mass and crush thresholds are randomized per-episode, without dropping or crushing. The agent has no direct access to the randomized values and must learn to infer safe grip force from live touch-sensor feedback.
