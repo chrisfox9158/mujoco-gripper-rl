@@ -12,9 +12,11 @@ This project was designed to deepen my own understanding of the mechanics of con
 - **Independently validated agent implementation** — See [Agent Validation](#agent-validation) below.
 
 ## Status
-Environment (physics model, observation/reward pipeline, done-condition tracking) and agent (networks, replay buffer, full TD3 orchestration) are complete and tested. The TD3 implementation has been validated in isolation against a known benchmark task (see [Agent Validation](#agent-validation)). Real training on the MuJoCo gripper task is in progress. Early runs on local hardware surfaced and resolved several real bugs (reward exploits, MuJoCo solver instability, a runaway penalty bug) but were compute-constrained.
+Environment (physics model, observation/reward pipeline, done-condition tracking) and agent (networks, replay buffer, full TD3 orchestration) are complete and tested. The TD3 implementation has been validated in isolation against a known benchmark task (see [Agent Validation](#agent-validation)).
 
-In order to continue testing, future training will be hosted on non-local hardware. The primary current option is Google Colab, which provides GPU access and longer, checkpointed runs via an attached Google Drive and snapshot system.
+Real training on the MuJoCo task was attempted on local hardware. Early runs surfaced and resolved several minor bugs, including reward-shaping exploits, MuJoCo solver instability, and a runaway penalty system. However, reaching a meaningfully trained, near-complete policy requires a training budget (likely tens of thousands of episodes, based on early-run trends) beyond local hardware constraints or the practical compute available via free-tier cloud computing resources.
+
+Rather than force an inadequate training run to completion, the training phase is deliberately concluded here. Design, implementation, and validation of the architecture are the primary outcomes of this project. A future attempt, given real compute access, would simply run `train.py` against the existing architecture; no further development work is required.
 
 ## Agent Validation
 Before real training began, the TD3 implementation was validated in isolation against a known benchmark task, independent of this project's MuJoCo environment and reward design in a secondary repo: [td3-validation](https://github.com/chrisfox9158/td3-validation). Results confirm the six-network architecture, replay buffer, and update logic converge correctly, consistent with published TD3 benchmarks.
