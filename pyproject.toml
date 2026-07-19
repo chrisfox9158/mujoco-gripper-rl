@@ -1,4 +1,4 @@
-[Mujoco Gripper RL]
+[project]
 name = "mujoco-gripper-rl"
 version = "0.1.0"
 description = "PyTorch-based TD3 RL agent for MuJoCo-based pressure-sensitive robotic gripper environment."
